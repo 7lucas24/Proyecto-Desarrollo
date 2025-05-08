@@ -1,0 +1,3 @@
+[kanban board] .- Tablero visual que muestra el flujo de trabajo y su estado.
+[wip limit] .- Límite de trabajo en curso para evitar sobrecarga del equipo.
+[lead time] .- Tiempo total desde que se inicia hasta que se completa una tarea.

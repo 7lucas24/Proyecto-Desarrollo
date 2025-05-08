@@ -3,20 +3,19 @@
 # Variable global para la opción elegida
 op=""
 
-# Variable global para el archivo correspondiente
-archivo_info=""
+# el archivo correspondiente
+arch=""
 
-# Submenú por metodología
 submenu() {
-    local nombre_metodologia="$1"
-    archivo_info="$2"
+    local nmeto="$1"
+    arch="$2"
 
     # Crear archivo si no existe
-    [ ! -f "$archivo_info" ] && touch "$archivo_info"
+    [ ! -f "$arch" ] && touch "$arch"
 
     while true; do
         echo
-        echo "Usted está en la sección ${nombre_metodologia}, seleccione la opción que desea utilizar:"
+        echo "Usted está en la sección ${nmeto}, seleccione la opción que desea utilizar:"
         echo "1. Agregar información"
         echo "2. Buscar información"
         echo "3. Eliminar información"
@@ -29,18 +28,18 @@ submenu() {
             1)
                 read -p "Ingrese el concepto: " concepto
                 read -p "Ingrese la definición: " definicion
-                echo "[$concepto] .- $definicion." >> "$archivo_info"
+                echo "[$concepto] .- $definicion." >> "$arch"
                 echo "Información agregada correctamente."
                 ;;
             2)
                 read -p "Ingrese el concepto a buscar: " buscar
                 echo "Resultados de búsqueda:"
-                grep -E "\[$buscar\]" "$archivo_info" || echo "No se encontró el concepto."
+                grep -E "\[$buscar\]" "$arch" || echo "No se encontró el concepto."
                 ;;
             3)
                 read -p "Ingrese el concepto a eliminar: " eliminar
-                if grep -qE "\[$eliminar\]" "$archivo_info"; then
-                    sed -i "/\[$eliminar\]/d" "$archivo_info"
+                if grep -qE "\[$eliminar\]" "$arch"; then
+                    sed -i "/\[$eliminar\]/d" "$arch"
                     echo "Concepto eliminado correctamente."
                 else
                     echo "El concepto no se encontró."
@@ -48,8 +47,8 @@ submenu() {
                 ;;
             4)
                 echo "Contenido de la base de información:"
-                if [ -s "$archivo_info" ]; then
-                    cat "$archivo_info"
+                if [ -s "$arch" ]; then
+                    cat "$arch"
                 else
                     echo "(Archivo vacío)"
                 fi
@@ -69,7 +68,6 @@ submenu() {
     done
 }
 
-# Menú principal (antes era 'main')
 main() {
     arg="$1"
 
@@ -84,13 +82,15 @@ main() {
         echo "2. Kanban"
         echo "3. XP (Extreme Programming)"
         echo "4. Crystal"
-        read -p "Ingrese una opción (1-4): " op
+        echo "5. Cambiar a metodologías tradicionales"
+        read -p "Ingrese una opción (1-5): " op
 
         case $op in
             1) submenu "SCRUM" "meto/scrum.inf" ;;
             2) submenu "Kanban" "meto/kanban.inf" ;;
             3) submenu "XP (Extreme Programming)" "meto/xp.inf" ;;
             4) submenu "Crystal" "meto/crystal.inf" ;;
+            5) main "-t" ;;
             *) echo "Opción no válida." ;;
         esac
 
@@ -99,12 +99,14 @@ main() {
         echo "1. Cascada"
         echo "2. Modelo en V"
         echo "3. Espiral"
-        read -p "Ingrese una opción (1-3): " op
+        echo "4. Cambiar a metodologías ágiles"
+        read -p "Ingrese una opción (1-4): " op
 
         case $op in
             1) submenu "Cascada" "meto/cascada.inf" ;;
             2) submenu "Modelo en V" "meto/modelo_v.inf" ;;
             3) submenu "Espiral" "meto/espiral.inf" ;;
+            4) main "-a" ;;
             *) echo "Opción no válida." ;;
         esac
 
